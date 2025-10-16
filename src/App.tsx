@@ -8,7 +8,7 @@ import Rssa from "./routes/Rssa";
 function App() {
 	return (
 		<div className="App">
-			<Router basename="/filter-bubbles-module/">
+			<Router basename="/cybered/filter-bubbles-module/">
 				<Routes>
 					<Route path="/" element={<MainLayout />}>
 						{/* Child routes */}
