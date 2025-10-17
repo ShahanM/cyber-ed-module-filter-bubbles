@@ -177,7 +177,7 @@ export default function PreferenceDispersion() {
 		replaceConsole({ text: "Initializing scene..." });
 		if (numTurtles > 50) {
 			updateConsole(
-				"Error: Failed to initialize, this simulation world is not big enough for more than 50 turtles.",
+				"Error: Failed to initialize. This simulation world is not big enough for more than 50 turtles.",
 				"red"
 			);
 			return;
@@ -185,8 +185,8 @@ export default function PreferenceDispersion() {
 		if (numFeatures > 5) {
 			updateConsole(
 				"Warning: Turtles are simple creatures, and likes small number of preferences." +
-					"More than 5 preferences, and some turtles will become secretive." +
-					"It be difficult for you see the information they are sharing but they are still secretly talking.",
+					" More than 5 preferences, and some turtles will become secretive." +
+					" It may be difficult for you see the information they are sharing but they are still secretly talking.",
 				"yellow"
 			);
 		}
