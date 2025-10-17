@@ -1,4 +1,5 @@
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from "@headlessui/react";
+import clsx from "clsx";
 import { Fragment } from "react";
 
 interface InstructionsModalProps {
@@ -33,25 +34,30 @@ export const InstructionsModal: React.FC<InstructionsModalProps> = ({ isOpen, on
 							leaveFrom="opacity-100 scale-100"
 							leaveTo="opacity-0 scale-95"
 						>
-							<DialogPanel className="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+							<DialogPanel
+								className={clsx(
+									"w-full max-w-lg transform overflow-hidden rounded-2xl",
+									"bg-white p-6 text-left align-middle shadow-xl transition-all"
+								)}
+							>
 								<DialogTitle as="h3" className="text-2xl font-bold leading-6 text-gray-900">
 									Instructions
 								</DialogTitle>
 								<div className="mt-4 space-y-4 text-gray-600">
 									<p>
 										On the right, you can see a canvas and a side panel. Clicking the{" "}
-										<span className="font-semibold text-indigo-600">initialize</span> button will
+										<span className="font-semibold text-amber-600">initialize</span> button will
 										create a bunch of turtles on the canvas. Each turtle has a set of colors on its
 										shell, representing its beliefs and opinions.
 									</p>
 									<h3 className="text-xl font-bold">Steps</h3>
 									<ol className="list-decimal list-inside space-y-1">
 										<li>
-											Click the <span className="font-semibold text-indigo-600">initialize</span>{" "}
+											Click the <span className="font-semibold text-amber-600">initialize</span>{" "}
 											button to create turtles.
 										</li>
 										<li>
-											Click the <span className="font-semibold text-indigo-600">run</span> button
+											Click the <span className="font-semibold text-amber-600">run</span> button
 											to start the simulation.
 										</li>
 									</ol>
@@ -70,7 +76,14 @@ export const InstructionsModal: React.FC<InstructionsModalProps> = ({ isOpen, on
 								<div className="mt-6">
 									<button
 										type="button"
-										className="inline-flex justify-center rounded-md border border-transparent bg-indigo-100 px-4 py-2 text-sm font-medium text-indigo-900 hover:bg-indigo-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
+										className={clsx(
+											"inline-flex justify-center rounded-md",
+											"border border-transparent bg-amber-100 px-4 py-2",
+											"text-sm font-medium text-amber-900 hover:bg-amber-200",
+											"focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500",
+											"focus-visible:ring-offset-2",
+											"cursor-pointer"
+										)}
 										onClick={onClose}
 									>
 										Got it, thanks!

@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { InstructionsModal } from "../components/InstructionsModal";
 import { SimulationCanvas } from "../components/SimulationCanvas";
 import { SimulationControls } from "../components/SimulationControls";
-import type { Turtle, TurtleBound } from "../types/simulations";
+import type { ConsoleLine, Turtle, TurtleBound } from "../types/simulations";
 
 const features = [
 	"#DC143C",
@@ -49,7 +49,7 @@ function sample<T>(array: T[], n: number): T[] {
 
 export default function PreferenceDispersion() {
 	const [turtles, setTurtles] = useState<Map<number, Turtle>>(new Map());
-	const [consoleOutputs, setConsoleOutputs] = useState<string[]>([]);
+	const [consoleOutputs, setConsoleOutputs] = useState<ConsoleLine[]>([]);
 	const [isRunning, setIsRunning] = useState(false);
 	const [isInitialized, setIsInitialized] = useState(false);
 	const [showInstructions, setShowInstructions] = useState(false);
@@ -63,12 +63,13 @@ export default function PreferenceDispersion() {
 
 	const timer = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
-	const updateConsole = useCallback((outputStr: string) => {
-		setConsoleOutputs((prev) => [...prev, outputStr]);
+	const updateConsole = useCallback((outputStr: string, color?: string) => {
+		const newLine: ConsoleLine = { text: outputStr, color: color };
+		setConsoleOutputs((prev) => [...prev, newLine]);
 	}, []);
 
-	const replaceConsole = useCallback((outputStr: string) => {
-		setConsoleOutputs([outputStr]);
+	const replaceConsole = useCallback((newLine: ConsoleLine) => {
+		setConsoleOutputs([newLine]);
 	}, []);
 
 	const populate = useCallback((n: number, m: number): Map<number, Turtle> => {
@@ -173,7 +174,22 @@ export default function PreferenceDispersion() {
 	};
 
 	const handleInitialize = () => {
-		replaceConsole("Initializing scene...");
+		replaceConsole({ text: "Initializing scene..." });
+		if (numTurtles > 50) {
+			updateConsole(
+				"Error: Failed to initialize, this simulation world is not big enough for more than 50 turtles.",
+				"red"
+			);
+			return;
+		}
+		if (numFeatures > 5) {
+			updateConsole(
+				"Warning: Turtles are simple creatures, and likes small number of preferences." +
+					"More than 5 preferences, and some turtles will become secretive." +
+					"It be difficult for you see the information they are sharing but they are still secretly talking.",
+				"yellow"
+			);
+		}
 		const newTurtles = populate(numTurtles, numFeatures);
 		setTurtles(newTurtles);
 		setIsInitialized(true);
@@ -213,13 +229,12 @@ export default function PreferenceDispersion() {
 			<InstructionsModal isOpen={showInstructions} onClose={() => setShowInstructions(false)} />
 			<div className="container mx-auto">
 				<div className="flex flex-col lg:flex-row gap-8">
-					{/* Left Column */}
 					<main className="w-full lg:w-2/3">
 						<div className="flex flex-col md:flex-row gap-6">
 							<div className="w-full md:w-1/3 text-gray-300 space-y-4">
 								<div>
 									<h2 className="text-3xl font-bold text-white">Filter Bubbles</h2>
-									<p className="mt-2 text-indigo-300">An agent-based simulation.</p>
+									{/* <p className="mt-2 text-indigo-300">An agent-based simulation.</p> */}
 								</div>
 								<p>
 									Filter bubbles form when you're only exposed to content that agrees with your
@@ -227,7 +242,7 @@ export default function PreferenceDispersion() {
 								</p>
 								<button
 									onClick={() => setShowInstructions(true)}
-									className="w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg"
+									className="w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg cursor-pointer"
 								>
 									Show Instructions
 								</button>

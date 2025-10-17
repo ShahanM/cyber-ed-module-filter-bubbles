@@ -1,9 +1,15 @@
 import React from "react";
+import type { ConsoleLine } from "../types/simulations";
+
 const InfoIcon = ({ text }: { text: string }) => <span title={text}>ℹ️</span>;
-const StatusConsole = ({ consoleOutputs }: { consoleOutputs: string[] }) => (
-	<div className="h-24 bg-gray-900 text-white font-mono text-xs p-2 rounded-md overflow-y-auto">
+const StatusConsole = ({ consoleOutputs }: { consoleOutputs: ConsoleLine[] }) => (
+	<div className="h-36 bg-gray-900 font-mono text-xs p-2 rounded-md overflow-y-auto">
 		{consoleOutputs.map((line, i) => (
-			<p key={i} className="whitespace-pre-wrap">{`> ${line}`}</p>
+			<p
+				key={i}
+				className="whitespace-pre-wrap"
+				style={{ color: line.color ? line.color : "white" }}
+			>{`> ${line.text}`}</p>
 		))}
 	</div>
 );
@@ -21,7 +27,7 @@ interface SimulationControlsProps {
 	setStepInterval: (n: number) => void;
 	isRunning: boolean;
 	isInitialized: boolean;
-	consoleOutputs: string[];
+	consoleOutputs: ConsoleLine[];
 	onInitialize: () => void;
 	onStep: () => void;
 	onRun: () => void;
@@ -49,7 +55,7 @@ const ControlInput = ({
 			id={id}
 			value={value}
 			onChange={onChange}
-			className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+			className="block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm"
 		/>
 		<div className="w-6 text-center">
 			<InfoIcon text={infoText} />
@@ -69,10 +75,10 @@ const ActionButton = ({
 	variant?: "primary" | "secondary";
 }) => {
 	const baseClasses =
-		"w-full rounded-md px-4 py-2 text-sm font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-50 disabled:cursor-not-allowed";
+		"w-full rounded-md px-4 py-2 text-sm cursor-pointer font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-50 disabled:cursor-not-allowed";
 	const variantClasses =
 		variant === "primary"
-			? "bg-indigo-600 text-white hover:bg-indigo-500 focus-visible:outline-indigo-600"
+			? "bg-amber-600 text-white hover:bg-amber-500 focus-visible:outline-amber-600"
 			: "bg-white text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50";
 
 	return (
@@ -84,7 +90,7 @@ const ActionButton = ({
 
 export const SimulationControls: React.FC<SimulationControlsProps> = (props) => {
 	return (
-		<div className="bg-gray-100 p-4 rounded-lg shadow-md space-y-4">
+		<div className="bg-gray-100 p-4 rounded-lg shadow-md space-y-4 text-gray-900">
 			<div className="space-y-3">
 				<ControlInput
 					label="n"

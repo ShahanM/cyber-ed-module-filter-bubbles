@@ -11,3 +11,8 @@ export interface Turtle {
 	colors: Set<string>;
 	bound: TurtleBound;
 }
+
+export interface ConsoleLine {
+	text: string;
+	color?: string;
+}
